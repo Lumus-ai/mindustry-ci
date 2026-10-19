@@ -22,7 +22,12 @@ for b in $bots; do
   : > $W/samples.csv; dead=0; survived=0
   for k in $(seq 1 $WAVES); do
     d=$((2+k)); m=$((k/2)); f=$((1+k))
-    echo "js for(var i=0;i<$d;i++){UnitTypes.dagger.spawn(Team.crux, 640+i*10, 840);} for(var i=0;i<$m;i++){UnitTypes.mace.spawn(Team.crux, 660+i*12, 860);} for(var i=0;i<$f;i++){UnitTypes.flare.spawn(Team.crux, 700+i*8, 800);}" > $C
+    if [ "${HARD:-0}" = 1 ]; then
+      fo=$((k/3)); ze=$(((k-3)/3)); [ $ze -lt 0 ] && ze=0; ho=$((k/2)); m=$((k/2+1)); d=$((k+3))
+      echo "js for(var i=0;i<$d;i++){UnitTypes.dagger.spawn(Team.crux, 640+i*10, 840);} for(var i=0;i<$m;i++){UnitTypes.mace.spawn(Team.crux, 660+i*12, 860);} for(var i=0;i<$fo;i++){UnitTypes.fortress.spawn(Team.crux, 680+i*14, 850);} for(var i=0;i<$ho;i++){UnitTypes.horizon.spawn(Team.crux, 700+i*8, 800);} for(var i=0;i<$ze;i++){UnitTypes.zenith.spawn(Team.crux, 720+i*10, 800);}" > $C
+    else
+      echo "js for(var i=0;i<$d;i++){UnitTypes.dagger.spawn(Team.crux, 640+i*10, 840);} for(var i=0;i<$m;i++){UnitTypes.mace.spawn(Team.crux, 660+i*12, 860);} for(var i=0;i<$f;i++){UnitTypes.flare.spawn(Team.crux, 700+i*8, 800);}" > $C
+    fi
     for t in $(seq 1 $SAMPLES); do
       sleep 5; echo 'js var c=Vars.state.teams.get(Team.sharded).core(); "SCORE core="+(c==null?-1:Math.round(c.health))+" blds="+Vars.state.teams.get(Team.sharded).buildings.size+" enemies="+Groups.unit.count(u=>u.team==Team.crux)' > $C
     done

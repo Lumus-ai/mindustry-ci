@@ -8,6 +8,7 @@ on:
       wave_sec: {description: "seconds between waves (60 = real-time, 15 = fast)", default: "15"}
       first_wave: {description: "seconds before first wave", default: "100"}
       map: {description: "map", default: "Veins"}
+      hard: {description: "1 = hard waves (fortress, horizon, zenith added, escalating)", default: "0"}
       mode_label: {description: "label stored in results (e.g. fast or real)", default: "fast"}
 permissions:
   contents: read
@@ -49,6 +50,7 @@ jobs:
         env:
           WAVE_SEC: ${{ inputs.wave_sec }}
           FIRST_WAVE: ${{ inputs.first_wave }}
+          HARD: ${{ inputs.hard }}
         run: arena/arena.sh "${{ matrix.bot }}" "${{ inputs.waves }}" "${{ inputs.map }}"
       - name: collect
         if: always()
@@ -58,7 +60,7 @@ jobs:
           import json,sys,os
           b,o=sys.argv[1:3]; f=f"arena/results/{b}.json"
           if os.path.exists(f):
-              d=json.load(open(f)); d["mode"]="${{ inputs.mode_label }}"; d["run"]=${{ matrix.run }}; d["wave_sec"]=${{ inputs.wave_sec }}
+              d=json.load(open(f)); d["mode"]="${{ inputs.mode_label }}"; d["run"]=${{ matrix.run }}; d["wave_sec"]=${{ inputs.wave_sec }}; d["mode"]+=("-hard" if "${{ inputs.hard }}"=="1" else "")
               json.dump(d,open(f"{o}/result-{b}-${{ matrix.run }}.json","w"))
           PY
           cp arena/run/$B/samples.csv arena/run/$B/bot.log arena/run/$B/telemetry.jsonl $O/ 2>/dev/null || true
