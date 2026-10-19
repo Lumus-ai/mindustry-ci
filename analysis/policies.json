@@ -1,0 +1,104 @@
+{
+  "defaults": {
+    "duoWant": 4,
+    "scatterWant": 0,
+    "hailWant": 2,
+    "wallWant": 6
+  },
+  "rules": [
+    {
+      "name": "cur-air-threat",
+      "when": {
+        "curAir>=": 6
+      },
+      "set": {
+        "scatterWant": 3,
+        "duoWant": 4,
+        "hailWant": 0,
+        "wallWant": 6
+      }
+    },
+    {
+      "name": "cur-ground-threat",
+      "when": {
+        "curGround>=": 12,
+        "curAir<=": 3
+      },
+      "set": {
+        "scatterWant": 0,
+        "duoWant": 6,
+        "hailWant": 2,
+        "wallWant": 12
+      }
+    },
+    {
+      "name": "air-heavy",
+      "when": {
+        "lastAir>=": 8
+      },
+      "set": {
+        "scatterWant": 3,
+        "duoWant": 4,
+        "hailWant": 0,
+        "wallWant": 6
+      }
+    },
+    {
+      "name": "mace-heavy",
+      "when": {
+        "maces>=": 3
+      },
+      "set": {
+        "scatterWant": 1,
+        "duoWant": 6,
+        "hailWant": 2,
+        "wallWant": 12
+      }
+    },
+    {
+      "name": "mixed",
+      "when": {
+        "lastAir>=": 4,
+        "lastGround>=": 6
+      },
+      "set": {
+        "scatterWant": 2,
+        "duoWant": 5,
+        "hailWant": 1,
+        "wallWant": 8
+      }
+    },
+    {
+      "name": "ground-heavy",
+      "when": {
+        "lastGround>=": 10,
+        "lastAir<=": 3
+      },
+      "set": {
+        "scatterWant": 0,
+        "duoWant": 6,
+        "hailWant": 2,
+        "wallWant": 12
+      }
+    },
+    {
+      "name": "any-air",
+      "when": {
+        "lastAir>=": 1
+      },
+      "set": {
+        "scatterWant": 1
+      }
+    },
+    {
+      "name": "late-scale",
+      "when": {
+        "engagements>=": 8
+      },
+      "set": {
+        "duoWant": 8,
+        "wallWant": 14
+      }
+    }
+  ]
+}

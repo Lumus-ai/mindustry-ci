@@ -1,0 +1,1 @@
+BOTOPTS="-Dstyle=balanced -DearlyEconomy=true -Deconomy=1 -DeconMinCopper=500 -Dunits=1"

@@ -1,0 +1,1 @@
+BOTOPTS="-Dstyle=balanced -DearlyEconomy=true -Dadapt=1 -Deconomy=1"

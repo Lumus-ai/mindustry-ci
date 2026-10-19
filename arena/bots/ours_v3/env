@@ -1,0 +1,1 @@
+BOTOPTS="-Deconomy=1 -Dunits=1 -DeconMinCopper=500"

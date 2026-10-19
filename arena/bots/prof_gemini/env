@@ -1,0 +1,1 @@
+BOTOPTS="-Dstyle=balanced -Dtactics=1 -Dadapt=1"

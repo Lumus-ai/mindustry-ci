@@ -1,0 +1,409 @@
+{
+  "meta": {
+    "title": "Human timing checkpoints for Mindustry Serpulo survival/PvP openings",
+    "built": "2026-10-20",
+    "labels": {
+      "V": "verified against game source, official data tables, or the game's own wave data",
+      "C": "community advice from a cited guide/thread",
+      "H": "hypothesis or historical benchmark, not confirmed for v160",
+      "I": "inference/synthesis by the v4 research team"
+    },
+    "note": "Checkpoints are timing TARGETS synthesized from community guides, not verified records. v160 source values override third-party figures where they conflict."
+  },
+  "profiles": {
+    "survival_generic": {
+      "label": "C+I",
+      "source": "v4 early-game research 1.3, synthesized from reddit walkthrough, unofficial wiki, manugames blog, Steam guide",
+      "source_urls": [
+        "https://www.reddit.com/r/Mindustry/comments/qyfw0f/a_complete_walkthrough_to_beating_mindustry/",
+        "https://mindustry-unofficial.fandom.com/wiki/Guide:_Simple_strategies_for_beginners",
+        "https://blog.manugames.com/p/mindustry-v8-a-factory-game-fan-s-guide-to-your-first-hours-on-serpulo",
+        "https://steamcommunity.com/sharedfiles/filedetails/?id=1966941960"
+      ],
+      "checkpoints": [
+        {
+          "name": "copper drill line",
+          "window_min": [
+            0,
+            2
+          ],
+          "all": [
+            {
+              "block": "mechanical-drill",
+              ">=": 3
+            }
+          ],
+          "desc": ">=3-4 drills, one finished route to core before starting others"
+        },
+        {
+          "name": "lead income + 2 supplied duos",
+          "window_min": [
+            2,
+            4
+          ],
+          "all": [
+            {
+              "item": "lead",
+              ">": 0
+            },
+            {
+              "turret": "duo",
+              "field": "n",
+              ">=": 2
+            },
+            {
+              "turret": "duo",
+              "field": "ammo",
+              ">=": 60
+            }
+          ],
+          "desc": "lead line to core; 2-3 supplied Duos covering enemy path"
+        },
+        {
+          "name": "graphite + combustion power",
+          "window_min": [
+            4,
+            6
+          ],
+          "all": [
+            {
+              "block": "graphite-press",
+              ">=": 2
+            },
+            {
+              "block": "combustion-generator",
+              ">=": 2
+            }
+          ],
+          "desc": "2-4 graphite presses (no power needed); 2 combustion generators"
+        },
+        {
+          "name": "AA over power",
+          "window_min": [
+            6,
+            9
+          ],
+          "all": [
+            {
+              "block": "scatter",
+              ">=": 1
+            }
+          ],
+          "desc": "Scatter covering generators (Flares prioritize generators [V]); conditional on air threat",
+          "conditional": "air"
+        },
+        {
+          "name": "choke walls",
+          "window_min": [
+            6,
+            9
+          ],
+          "all": [
+            {
+              "block": "copper-wall",
+              ">=": 24
+            }
+          ],
+          "desc": "3-4 wall layers at choke; 24 tiles ~ 3 layers x 8 wide [H proxy]"
+        },
+        {
+          "name": "first silicon smelter",
+          "window_min": [
+            9,
+            12
+          ],
+          "all": [
+            {
+              "block": "silicon-smelter",
+              ">=": 1
+            }
+          ],
+          "desc": "only when sand+coal+power all live (needs ~5 mech coal drills + 8 sand drills + 30 power/s [V/C])"
+        },
+        {
+          "name": "silicon to core",
+          "window_min": [
+            12,
+            15
+          ],
+          "all": [
+            {
+              "item": "silicon",
+              ">": 0
+            }
+          ],
+          "desc": "silicon delivered to core; pneumatic drill upgrades; titanium scouting"
+        },
+        {
+          "name": "mender support",
+          "window_min": [
+            9,
+            15
+          ],
+          "all": [
+            {
+              "block": "mender",
+              ">=": 1
+            }
+          ],
+          "desc": "menders behind wall line, powered [C]"
+        }
+      ]
+    },
+    "pvp_ranked_historical": {
+      "label": "H",
+      "source": "u/Green719 2021 ranked guide (v7-era, resource-rich maps, generous loadouts; disputed in thread comments; NOT verified for v160)",
+      "source_urls": [
+        "https://www.reddit.com/r/Mindustry/comments/oyd6br/mindustry_pvp_guide/"
+      ],
+      "checkpoints": [
+        {
+          "name": "copper grabbed",
+          "window_min": [
+            0,
+            1
+          ],
+          "all": [
+            {
+              "block": "mechanical-drill",
+              ">=": 3
+            }
+          ],
+          "desc": "everything grabbable before the 1:00 mark"
+        },
+        {
+          "name": "4 graphite presses",
+          "window_min": [
+            1,
+            2.5
+          ],
+          "all": [
+            {
+              "block": "graphite-press",
+              ">=": 4
+            }
+          ],
+          "desc": "graphite before lead is fine with a starting loadout"
+        },
+        {
+          "name": "silicon and titanium",
+          "window_min": [
+            2.5,
+            5
+          ],
+          "all": [
+            {
+              "block": "silicon-smelter",
+              ">=": 1
+            },
+            {
+              "item": "titanium",
+              ">": 0
+            }
+          ],
+          "desc": "silicon AND titanium (interchangeable order)"
+        },
+        {
+          "name": "thorium",
+          "window_min": [
+            2.5,
+            5
+          ],
+          "all": [
+            {
+              "item": "thorium",
+              ">": 0
+            }
+          ],
+          "desc": "~2:30 cited on rich ranked maps [H, disputed]"
+        },
+        {
+          "name": "first Zenith",
+          "window_min": [
+            5,
+            6
+          ],
+          "all": [
+            {
+              "own_unit": "zenith",
+              ">=": 1
+            }
+          ],
+          "desc": "~5:45 cited [H, disputed]; v160 armor/unit changes make this stale"
+        }
+      ]
+    },
+    "gemini_highlevel_H": {
+      "label": "H (owner-supplied Gemini report on high-level play; unverified numbers/video links; cross-check vs v160 source)",
+      "source": "gemini-human-play-report.md (owner paste, 2026-10-20); listed videos unverified: Corvus King PvP, RZ hex PvP, Capeko3030 speedrun, Thanetian Gaming, The Dutch Actuary, Larofeticus hex PvP",
+      "source_urls": [],
+      "checkpoints": [
+        {
+          "name": "drill bootstrapping",
+          "window_min": [
+            2.5,
+            3.5
+          ],
+          "all": [
+            {
+              "block": "mechanical-drill",
+              ">=": 8
+            }
+          ],
+          "desc": "claimed 3min: 4-6 copper + 2-3 lead + 2 coal drills, 0-1 Duo"
+        },
+        {
+          "name": "scatter + air factory + monos",
+          "window_min": [
+            4.5,
+            5.5
+          ],
+          "all": [
+            {
+              "block": "scatter",
+              ">=": 1
+            },
+            {
+              "block": "air-factory",
+              ">=": 1
+            },
+            {
+              "own_unit": "mono",
+              ">=": 2
+            }
+          ],
+          "desc": "claimed 5min: +4 sand drills, 1 Scatter, 1 Air Factory with 2-4 Mono"
+        },
+        {
+          "name": "mid-game expansion",
+          "window_min": [
+            9,
+            11
+          ],
+          "all": [
+            {
+              "blocks_sum": [
+                "mechanical-drill",
+                "pneumatic-drill"
+              ],
+              ">=": 12
+            },
+            {
+              "item": "titanium",
+              ">": 0
+            },
+            {
+              "block": "scatter",
+              ">=": 2
+            },
+            {
+              "blocks_sum": [
+                "hail",
+                "lancer"
+              ],
+              ">=": 1
+            }
+          ],
+          "desc": "claimed 10min: 12-16 drills, titanium, 2-3 Scatter, 1-2 Hail/Lancer, 6-8 Flare/Horizon"
+        },
+        {
+          "name": "T2 siege force",
+          "window_min": [
+            14,
+            16
+          ],
+          "all": [
+            {
+              "blocks_sum": [
+                "mechanical-drill",
+                "pneumatic-drill"
+              ],
+              ">=": 20
+            },
+            {
+              "blocks_sum": [
+                "ripple",
+                "salvo",
+                "fuse"
+              ],
+              ">=": 1
+            },
+            {
+              "own_units_sum": [
+                "horizon",
+                "nova",
+                "mace",
+                "pulsar",
+                "quasar"
+              ],
+              ">=": 12
+            }
+          ],
+          "desc": "claimed 15min: 20+ drills, Ripple/Salvo/Fuse, 12+ T2 units"
+        }
+      ]
+    }
+  },
+  "economy_ratios": {
+    "label": "V/C cross-checked (drill counts from u/Leo-MathGuy 2024, consistent with v160 source rates; factory power from v160 source)",
+    "source_urls": [
+      "https://www.reddit.com/r/Mindustry/comments/1bkv420/math_for_early_game_pvp/",
+      "https://raw.githubusercontent.com/Anuken/Mindustry/v160/core/src/mindustry/content/Blocks.java"
+    ],
+    "ratios": [
+      {
+        "name": "coal drills per graphite press",
+        "value": "4 mech (3 pneumatic)",
+        "use": "check drill:press ratio at press completion"
+      },
+      {
+        "name": "coal+sand drills per silicon smelter",
+        "value": "5 mech coal + 8 mech sand + 30 power/s",
+        "use": "gate smelter placement"
+      },
+      {
+        "name": "combustion bank",
+        "value": "3 mech coal drills -> 2 combustion generators (120/s)",
+        "use": "power budget"
+      },
+      {
+        "name": "drills per copper belt",
+        "value": "~11 mech saturate one copper belt",
+        "use": "belt budget"
+      }
+    ]
+  },
+  "ground_zero_waves": {
+    "label": "V",
+    "source": "Miraheze Ground Zero (objectives, wave table)",
+    "source_urls": [
+      "https://mindustry.miraheze.org/wiki/Ground_Zero"
+    ],
+    "facts": [
+      "9 waves, ~2:10 spacing; wave 3 starts ~1 min after last tutorial objective",
+      "Daggers every wave (1 at wave 1, +1 every other wave); Flares on waves 2/4/6/8; one Mace on wave 8",
+      "Mace 550 HP, 4 armor; flame pierces ONE wall layer -> use 3-4 copper wall layers"
+    ]
+  },
+  "veins": {
+    "label": "gap",
+    "note": "No published per-wave breakdown or opening found for Veins/Glacier/Passage. Bot test waves are scripted, not map-natural. Veins survival has natural waves disabled in our harness (rules add waves false) and enemies are driver-spawned.",
+    "source": "v4 early-game research 1.4"
+  },
+  "speedrun_sector_clear": {
+    "label": "V (leaderboard records, mod-retimed from video)",
+    "source": "speedrun.com Mindustry Ground Zero Sector Clear leaderboard, observed 2026-10-20",
+    "source_urls": [
+      "https://www.speedrun.com/mindustry/runs/zpe1l2ny",
+      "https://www.speedrun.com/mindustry/levels",
+      "https://www.speedrun.com/mindustry/leaderboards?h=Ground_Zero-Sector_Clear-Single-player-Default_Loadout-v7&x=l_y9mreg1w-7dgnzyg2-yn2v9od8.8142g9el-yn21oyj8.5lmgeg4l-ylp7jkvl.mln28mnl"
+    ],
+    "facts": [
+      "Ground Zero Sector Clear WR 4m11.590s by potatop, v8 build 158.1, normal difficulty, default loadout (2 months before observation; mod-retimed from video frames)",
+      "Ground Zero v7 (build 146) board has multiple sub-5-minute clears (e.g. 4m43s, 4m53.260s by virogens on the levels overview)",
+      "median/casual clears on the same boards run 8-12+ minutes",
+      "these are END-OF-SECTOR times for a 9-wave tutorial sector, not per-minute build checkpoints; they bound what optimized human play achieves"
+    ],
+    "use": "context benchmark only; bot test map is Veins, not Ground Zero, so no direct comparison is made"
+  }
+}

@@ -1,0 +1,84 @@
+name: arena
+on:
+  workflow_dispatch:
+    inputs:
+      bots: {description: "space-separated bot names (ours_v2 ours_v3 ours_v4int prof_nemotron prof_gemini prof_gpt6 prof_grok)", default: "ours_v2 ours_v4int"}
+      runs: {description: "replicates per bot", default: "3"}
+      waves: {description: "scripted waves", default: "12"}
+      wave_sec: {description: "seconds between waves (60 = real-time, 15 = fast)", default: "15"}
+      first_wave: {description: "seconds before first wave", default: "100"}
+      map: {description: "map", default: "Veins"}
+      mode_label: {description: "label stored in results (e.g. fast or real)", default: "fast"}
+permissions:
+  contents: read
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - id: m
+        env:
+          BOTS: ${{ inputs.bots }}
+          RUNS: ${{ inputs.runs }}
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json,os
+          bots=os.environ["BOTS"].split(); runs=int(os.environ["RUNS"])
+          inc=[{"bot":b,"run":r} for b in bots for r in range(1,runs+1)]
+          assert 0<len(inc)<=100, "matrix too large"
+          print("matrix="+json.dumps({"include":inc}))
+          PY
+  run:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '25'}
+      - name: setup
+        run: ./setup.sh
+      - name: arena
+        env:
+          WAVE_SEC: ${{ inputs.wave_sec }}
+          FIRST_WAVE: ${{ inputs.first_wave }}
+        run: arena/arena.sh "${{ matrix.bot }}" "${{ inputs.waves }}" "${{ inputs.map }}"
+      - name: collect
+        if: always()
+        run: |
+          B=${{ matrix.bot }}; O=out/${B}-${{ matrix.run }}; mkdir -p $O
+          python3 - "$B" "$O" <<'PY'
+          import json,sys,os
+          b,o=sys.argv[1:3]; f=f"arena/results/{b}.json"
+          if os.path.exists(f):
+              d=json.load(open(f)); d["mode"]="${{ inputs.mode_label }}"; d["run"]=${{ matrix.run }}; d["wave_sec"]=${{ inputs.wave_sec }}
+              json.dump(d,open(f"{o}/result-{b}-${{ matrix.run }}.json","w"))
+          PY
+          cp arena/run/$B/samples.csv arena/run/$B/bot.log arena/run/$B/telemetry.jsonl $O/ 2>/dev/null || true
+          cp arena/srvdir/server.log $O/ 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: run-${{ matrix.bot }}-${{ matrix.run }}
+          path: out/
+          retention-days: 14
+  aggregate:
+    needs: run
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {pattern: 'run-*', path: all}
+      - run: |
+          python3 scripts/aggregate.py all > summary.md
+          { echo "## Arena summary (waves=${{ inputs.waves }}, wave_sec=${{ inputs.wave_sec }}, mode=${{ inputs.mode_label }})"; cat summary.md; } | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with: {name: summary, path: summary.md}
