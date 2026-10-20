@@ -1,32 +1,23 @@
 #!/usr/bin/env python3
 """Aggregate arena results from downloaded artifacts. usage: aggregate.py DIR > summary.md
-Each artifact dir holds <bot>.json (arena result) and optionally telemetry.jsonl, samples.csv."""
-import json, glob, os, sys, re, statistics as st
+Primary metric: wave of death (core destroyed = server printed 'Game over' on the test map). Survivors = no Game over in all waves."""
+import json, glob, os, sys, collections, statistics as st
 root = sys.argv[1] if len(sys.argv) > 1 else "."
-rows = {}
+rows = collections.defaultdict(list)
 for f in glob.glob(os.path.join(root, "**", "result-*.json"), recursive=True):
-    d = json.load(open(f)); d["dir"] = os.path.dirname(f)
-    # telemetry: ammo starvation = share of samples where >=1 turret type has low ammo turrets
-    low = tot = lostsum = 0; duos_end = None; lost = None
-    t = os.path.join(d["dir"], "telemetry.jsonl")
-    if os.path.exists(t):
-        for line in open(t):
-            try: j = json.loads(line)
-            except Exception: continue
-            if j.get("type") != "sample": continue
-            lostsum += sum(v for v in (j.get("lost") or {}).values() if isinstance(v,(int,float)))
-            tur = j.get("turrets") or j.get("turret_ammo") or {}
-            if isinstance(tur, dict) and tur:
-                n = sum(v.get("n", 0) for v in tur.values()); l = sum(v.get("low", 0) for v in tur.values())
-                if n: low += l; tot += n
-                if "duo" in tur: duos_end = tur["duo"].get("n")
-    d["low_ammo_pct"] = round(100 * low / tot, 1) if tot else None
-    d["duos_end"] = duos_end; d["lost"] = lostsum if os.path.exists(t) else None
-    rows.setdefault((d["bot"], d.get("mode", "")), []).append(d)
-out = ["| bot | mode | runs | survived all waves | mean waves | mean core hp final | mean buildings | turrets low-ammo % | mean duos at end | mean blocks lost |", "|---|---|---|---|---|---|---|---|---|---|"]
+    d = json.load(open(f)); d["dir"] = os.path.dirname(f); rows[(d["bot"], d.get("mode", ""))].append(d)
 def m(v):
     v = [x for x in v if x is not None]; return round(st.mean(v), 1) if v else "n/a"
+out = ["| bot | mode | runs | survived all | death wave histogram (wave: runs) | mean duos at wave 1 / 3 start | survivors' mean core hp | mean death t (s) |", "|---|---|---|---|---|---|---|---|"]
 for (b, mode), rs in sorted(rows.items()):
-    full = sum(1 for r in rs if not r["core_destroyed"] and r["waves_survived"] >= r["waves_total"])
-    out.append(f"| {b} | {mode} | {len(rs)} | {full}/{len(rs)} | {m([r['waves_survived'] for r in rs])} | {m([r['core_hp_final'] for r in rs])} | {m([r['buildings_final'] for r in rs])} | {m([r['low_ammo_pct'] for r in rs])} | {m([r['duos_end'] for r in rs])} | {m([r['lost'] for r in rs])} |")
+    surv = [r for r in rs if not r.get("core_destroyed")]
+    hist = collections.Counter(r["death_wave"] for r in rs if r.get("core_destroyed"))
+    h = ", ".join(f"{k}: {v}" for k, v in sorted(hist.items())) or "none"
+    d1 = [r["duos_at_wave"][0] for r in rs if r.get("duos_at_wave")]
+    d3 = [r["duos_at_wave"][2] for r in rs if len(r.get("duos_at_wave", [])) > 2]
+    out.append(f"| {b} | {mode} | {len(rs)} | {len(surv)}/{len(rs)} | {h} | {m(d1)} / {m(d3)} | {m([r['core_hp_final'] for r in surv])} | {m([r.get('death_t') for r in rs if r.get('core_destroyed')])} |")
 print("\n".join(out))
+print("\nPer-run (waves survived/final hp; X = died, number = wave of death):")
+for (b, mode), rs in sorted(rows.items()):
+    rs.sort(key=lambda r: r.get("run", 0))
+    print(f"- {b} {mode}: " + " ".join((f"X{r['death_wave']}" if r.get("core_destroyed") else f"ok/{r['core_hp_final']}") for r in rs))

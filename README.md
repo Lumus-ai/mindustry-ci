@@ -10,3 +10,6 @@ Results: job summary table + artifacts (result json, samples.csv, bot.log, serve
 
 Fast mode only shortens the scripted wave interval. The bot gets less game time between waves, so fast results are a stricter test, not equal to real-time results. Compare modes on the same bot before trusting fast numbers.
 Local run: see arena/README.md (needs JDK 17 + 25).
+
+## Validity warning
+Results before the harness fix (stop on first server `Game over`) are invalid for runs where the core died. See RESULTS_INVALID.md. Primary metric now: wave of death; duos/scatters at each wave start are recorded.

@@ -63,7 +63,7 @@ jobs:
               d=json.load(open(f)); d["mode"]="${{ inputs.mode_label }}"; d["run"]=${{ matrix.run }}; d["wave_sec"]=${{ inputs.wave_sec }}; d["mode"]+=("-hard" if "${{ inputs.hard }}"=="1" else "")
               json.dump(d,open(f"{o}/result-{b}-${{ matrix.run }}.json","w"))
           PY
-          cp arena/run/$B/samples.csv arena/run/$B/bot.log arena/run/$B/telemetry.jsonl $O/ 2>/dev/null || true
+          cp arena/run/$B/samples.csv arena/run/$B/bot.log arena/run/$B/telemetry.jsonl arena/run/$B/events.log $O/ 2>/dev/null || true
           cp arena/srvdir/server.log $O/ 2>/dev/null || true
       - uses: actions/upload-artifact@v4
         if: always()
