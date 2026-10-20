@@ -2,7 +2,7 @@ name: arena
 on:
   workflow_dispatch:
     inputs:
-      bots: {description: "space-separated bot names (ours_v2 ours_v3 ours_v4int ours_v4sus ours_v5b ours_v5c ours_v5h ours_v5i ours_v5j ours_v5k ours_v5l ours_v5m ours_v5mc prof_nemotron prof_gemini prof_gpt6 prof_grok)", default: "ours_v2 ours_v4int"}
+      bots: {description: "space-separated bot names (ours_v2 ours_v3 ours_v4int ours_v4sus ours_v5b ours_v5c ours_v5h ours_v5i ours_v5j ours_v5k ours_v5l ours_v5m ours_v5mc ours_v5n prof_nemotron prof_gemini prof_gpt6 prof_grok)", default: "ours_v2 ours_v4int"}
       runs: {description: "replicates per bot", default: "3"}
       waves: {description: "scripted waves", default: "12"}
       wave_sec: {description: "seconds between waves (60 = real-time, 15 = fast)", default: "15"}
