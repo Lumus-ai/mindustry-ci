@@ -1,0 +1,1 @@
+BOTOPTS="-DearlyEconomy=true -Deconomy=1 -DeconMinCopper=300 -DeconMinTurrets=3 -DecoHold=4 -Dunits=1 -Dpvp=1 -Dpvp.ratio=0.8 -Dpvp.minRush=3 -Dpvp.debug=1 -DunitSiMargin=0 -Dtelemetry=telemetry.jsonl"
