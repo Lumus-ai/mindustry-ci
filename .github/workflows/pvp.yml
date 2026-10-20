@@ -42,7 +42,7 @@ jobs:
         with: {distribution: temurin, java-version: '17'}
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '25'}
-      - run: ./setup.sh && pip install pillow
+      - run: ./setup.sh && pip install pillow && sudo apt-get install -y -qq ffmpeg
       - name: pvp
         run: arena/pvp.sh "${{ inputs.map }}" "${{ inputs.minutes }}" "${{ matrix.a }}" "${{ matrix.b }}"
       - name: render
