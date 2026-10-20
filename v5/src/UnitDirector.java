@@ -222,7 +222,7 @@ public final class UnitDirector {
     static float nextDbgU; static void dbgU(String m){ if(clock>=nextDbgU){ nextDbgU=clock+60*30; Log.info("UNITDBG "+m);} }
     static boolean afford(Block b, CoreBlock.CoreBuild c) {
         for (ItemStack r : b.requirements) {
-            int extra = r.item==Items.silicon?30:r.item==Items.lead?15:0;
+            int extra = r.item==Items.silicon?Integer.getInteger("unitSiMargin",30):r.item==Items.lead?15:0;
             int reserve = reserve(r.item);
             if (c.items.get(r.item) < Math.ceil(r.amount*state.rules.buildCostMultiplier) + reserve + extra) return false;
         }
