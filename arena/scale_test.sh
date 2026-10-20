@@ -11,10 +11,10 @@ if [ "$S" != "1" ]; then
   echo "js Time.setDeltaProvider(()=>Math.min(Core.graphics.getDeltaTime()*60,6)*$S)" > $C; sleep 1
   echo 'js "AFTER delta="+Time.delta' > $C
 fi
-./launch.sh local $BOT >/dev/null
+./launch.sh local $BOT $BOT >/dev/null
 END=$(( $(date +%s) + MIN*60 )); : > results/scale_samples.log
 while [ $(date +%s) -lt $END ]; do
-  echo 'js var t=Vars.state.teams.get(Team.sharded); var c2=Vars.state.teams.get(Team.crux); "SCALE wall="+Math.round(Time.millis()/1000)+" time="+Math.round(Time.time)+" tick="+Math.round(Vars.state.tick)+" delta="+Time.delta+" bldsA="+t.buildings.size+" bldsB="+c2.buildings.size+" players="+Groups.player.size()' > $C
+  echo 'js var t=Vars.state.teams.get(Team.sharded); var c2=Vars.state.teams.get(Team.crux); "SCALE paused="+Vars.state.isPaused()+" wall="+Math.round(Time.millis()/1000)+" time="+Math.round(Time.time)+" tick="+Math.round(Vars.state.tick)+" delta="+Time.delta+" bldsA="+t.buildings.size+" bldsB="+c2.buildings.size+" players="+Groups.player.size()' > $C
   sleep 10
 done
 sed 's/\x1b\[[0-9;]*m//g' srvdir/server.log | grep -a -E "PROBE|AFTER|SCALE " | sed -E 's/^.*(PROBE|AFTER|SCALE )/\1/' > results/scale_samples.log
