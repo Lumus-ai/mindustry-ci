@@ -27,7 +27,7 @@ for sl in snaps:
     im=bg.copy();d=ImageDraw.Draw(im)
     for b in B.split(';'):
         if not b: continue
-        k,x,y,s,c=b.split(',');x,y,s=int(x),int(y),int(s)
+        k,x,y,s,c=b.split(',')[:5];x,y,s=int(x),int(y),int(s)
         px=(x-(s-1)//2)*S;py=(H-1-y-(s-1)//2)*S
         d.rectangle([px,py-(s-1)*S,px+s*S-1,py+S-1],fill=col.get(k,'#888'),outline='#fff' if c=='1' else None)
     for u in U.split(';'):

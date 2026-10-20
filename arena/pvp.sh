@@ -13,7 +13,7 @@ sleep 2; echo 'js var W=Vars.world.width(),H=Vars.world.height(),m="";for(var y=
 : > results/pvp_samples.log; END=$(( $(date +%s) + MIN*60 )); sleep 20
 while [ $(date +%s) -lt $END ]; do
   echo 'js var s=""; Groups.player.each(p=>{s+=p.name+"="+p.team().name+","}); var t2=""; Vars.state.teams.getActive().each(t=>{t2+=t.team.name+":core="+(t.cores.size>0?Math.round(t.cores.first().health):-1)+":blds="+t.buildings.size+":units="+t.units.size+" "}); "PVP "+Math.round(Time.millis()/1000)+" players="+s+" teams="+t2' > $C
-  echo 'js var B=[];Groups.build.each(b=>{B.push(b.team.id+","+b.tileX()+","+b.tileY()+","+b.block.size+","+(b instanceof CoreBlock.CoreBuild?1:0))});var U=[];Groups.unit.each(u=>{if(!u.dead)U.push(u.team.id+","+Math.round(u.x/8)+","+Math.round(u.y/8)+","+(u.isFlying()?1:0))});var T=[];Vars.state.teams.getActive().each(t=>{T.push(t.team.id+"="+t.team.name)});"SNAP "+Math.round(Time.millis()/1000)+"|"+T.join(",")+"|"+B.join(";")+"|"+U.join(";")' > $C
+  echo 'js var B=[];Groups.build.each(b=>{B.push(b.team.id+","+b.tileX()+","+b.tileY()+","+b.block.size+","+(b instanceof CoreBlock.CoreBuild?1:0)+","+b.block.name)});var U=[];Groups.unit.each(u=>{if(!u.dead)U.push(u.team.id+","+Math.round(u.x/8)+","+Math.round(u.y/8)+","+(u.isFlying()?1:0))});var T=[];Vars.state.teams.getActive().each(t=>{T.push(t.team.id+"="+t.team.name)});"SNAP "+Math.round(Time.millis()/1000)+"|"+T.join(",")+"|"+B.join(";")+"|"+U.join(";")' > $C
   sleep 3
   grep -a "Game over" srvdir/server.log | tail -1 >> results/pvp_samples.log
   grep -aq "Game over" srvdir/server.log && break
