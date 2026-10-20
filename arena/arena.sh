@@ -20,7 +20,7 @@ for b in $bots; do
   (cd $W; export BOTOPTS HOST=localhost PORT=6567 NAME=arena_$b STREAM=$SPORT MAXSEC=$((WAVES*WAVE_SEC+FIRST_WAVE+300)); setsid nohup $MB/arena/bots/$b/run.sh > bot.log 2>&1 &)
   sleep $FIRST_WAVE
   : > $W/samples.csv; dead=0; survived=0; death_wave=0; death_t=0; T0=$SECONDS
-  gover(){ grep -a -q "Game over.*map $MAP" srvdir/server.log; }
+  gover(){ sed "s/\x1b\[[0-9;]*m//g" srvdir/server.log | grep -a -q "Game over.*map $MAP"; }
   for k in $(seq 1 $WAVES); do
     d=$((2+k)); m=$((k/2)); f=$((1+k))
     echo 'js var tm=Vars.state.teams.get(Team.sharded); var cc=tm.core(); "WSTART '$k' duos="+tm.buildings.count(b=>b.block==Blocks.duo)+" scatters="+tm.buildings.count(b=>b.block==Blocks.scatter)+" core="+(cc==null?-1:Math.round(cc.health))' > $C
@@ -40,7 +40,7 @@ for b in $bots; do
     line=$(grep -a SCORE srvdir/server.log | tail -1); echo "$k,$line" >> $W/samples.csv
     survived=$k
   done
-  grep -a -h -E 'WSTART|SCORE|Game over' srvdir/server.log | sed 's/\x1b\[[0-9;]*m//g' > $W/events.log
+  sed 's/\x1b\[[0-9;]*m//g' srvdir/server.log | grep -a -E 'WSTART|SCORE|Game over' > $W/events.log
   python3 - $b $WAVES $survived $dead $death_wave $death_t $MAP <<'PY'
 import sys,json,re,os
 b,W,s,dead,dw,dt,MAP=sys.argv[1],int(sys.argv[2]),int(sys.argv[3]),int(sys.argv[4]),int(sys.argv[5]),int(sys.argv[6]),sys.argv[7]
